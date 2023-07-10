@@ -7,6 +7,7 @@ import {
 import { publicProvider } from 'wagmi/providers/public'
 import { env } from './env'
 
+
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     bsc,

@@ -1,8 +1,8 @@
 import { Toast } from "antd-mobile"
 import { useCallback, useMemo, useState } from "react"
-import { BaseError, Hash, UnknownRpcError, UserRejectedRequestError } from "viem"
-import { usePublicNodeWaitForTransaction } from "./usePublicNodeWaitForTransaction"
-import { WaitForTransactionResult, SendTransactionResult } from 'wagmi/actions'
+import { BaseError, Hash, UnknownRpcError, TransactionExecutionError, ContractFunctionExecutionError, UserRejectedRequestError } from "viem"
+import { SendTransactionResult, WaitForTransactionResult, waitForTransaction } from "wagmi/actions"
+
 export type CatchTxErrorReturn = {
   fetchWithCatchTxError: (fn: () => Promise<SendTransactionResult | Hash>) => Promise<WaitForTransactionResult>
   fetchTxResponse: (fn: () => Promise<SendTransactionResult | Hash>) => Promise<SendTransactionResult>
@@ -14,6 +14,7 @@ export type CatchTxErrorReturn = {
 
 /// only show corrected parsed viem error
 export function parseError<TError>(err: TError): BaseError | null {
+
   if (err instanceof BaseError) {
     return err
   }
@@ -29,7 +30,6 @@ export function parseError<TError>(err: TError): BaseError | null {
 export default function useCatchTxError(): CatchTxErrorReturn {
   const [loading, setLoading] = useState(false)
   const [txResponseLoading, setTxResponseLoading] = useState(false)
-  const { waitForTransaction } = usePublicNodeWaitForTransaction()
 
   const handleNormalError = useCallback(
     (error: any) => {
@@ -51,19 +51,12 @@ export default function useCatchTxError(): CatchTxErrorReturn {
     [],
   )
 
-  const possibleRejectMessage = useMemo(() => ['Cancelled by User', 'cancel', 'Transaction was rejected'], [])
+  const possibleRejectMessage = useMemo(() => ['Cancelled by User', 'User rejected the request', 'cancel', 'Transaction was rejected'], [])
 
   const isUserRejected = useCallback((err: any): boolean => {
-    if (err instanceof UserRejectedRequestError) {
-      return true
+    if (err instanceof TransactionExecutionError) {
+      return possibleRejectMessage.some((msg) => err.message.includes(msg))
     }
-    if (err instanceof UnknownRpcError) {
-      // fallback for some wallets that don't follow EIP 1193, trust, safe
-      if (possibleRejectMessage.some((msg) => err.details?.includes(msg))) {
-        return true
-      }
-    }
-
     // fallback for raw rpc error code
     if (typeof err === 'object') {
       if (
@@ -92,11 +85,8 @@ export default function useCatchTxError(): CatchTxErrorReturn {
          * wait for useSWRMutation finished, so we could apply SWR in case manually trigger tx call
          */
         tx = await callTx()
-
         const hash = typeof tx === 'string' ? tx : tx.hash
-
         Toast.show('Transaction Submitted')
-
         return { hash }
       } catch (error: any) {
         if (!isUserRejected(error)) {
@@ -119,10 +109,8 @@ export default function useCatchTxError(): CatchTxErrorReturn {
   const fetchWithCatchTxError = useCallback(
     async (callTx: () => Promise<SendTransactionResult | Hash>): Promise<WaitForTransactionResult | null> => {
       let tx: SendTransactionResult | Hash = null
-
       try {
         setLoading(true)
-
         /**
          * https://github.com/vercel/swr/pull/1450
          *
@@ -131,20 +119,24 @@ export default function useCatchTxError(): CatchTxErrorReturn {
         tx = await callTx()
 
         const hash = typeof tx === 'string' ? tx : tx.hash
-
         Toast.show('Transaction Submitted')
-
         const receipt = await waitForTransaction({
           hash,
         })
         return receipt
       } catch (error: any) {
+        console.log(error);
+
+        console.log(new BaseError(error).cause);
+        console.log(new BaseError(error).details);
         if (!isUserRejected(error)) {
           if (!tx) {
             handleNormalError(error)
           } else {
             handleTxError(error, typeof tx === 'string' ? tx : tx.hash)
           }
+        } else {
+          Toast.show('User rejected the request')
         }
       } finally {
         setLoading(false)
@@ -152,7 +144,7 @@ export default function useCatchTxError(): CatchTxErrorReturn {
 
       return null
     },
-    [waitForTransaction, isUserRejected, handleNormalError, handleTxError],
+    [isUserRejected, handleNormalError, handleTxError],
   )
 
   return {

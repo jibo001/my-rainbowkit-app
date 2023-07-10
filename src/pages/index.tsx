@@ -7,6 +7,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { MaxUint256 } from 'ethers'
 import { Button } from 'antd-mobile'
 import useCatchTxError from 'hooks/useCatchTxError'
+import BigNumber from 'bignumber.js'
 
 const Home: NextPage = () => {
   const { data: walletClient } = useWalletClient()
@@ -36,6 +37,17 @@ const Home: NextPage = () => {
       console.log(receipt)
     }
 
+    const handleDeposit = async () => {
+      const receipt = await fetchWithCatchTxError(() => {
+        return callWithGasPrice(idoStakeContract, 'deposit', [
+          1,
+          new BigNumber(1000),
+          false
+        ])
+      })
+      console.log(receipt)
+    }
+
     if (ido.isFetching) {
       return <div>Loading...</div>
     } else if (ido.isSuccess) {
@@ -53,6 +65,7 @@ const Home: NextPage = () => {
               授权
             </Button>
           )}
+          <Button onClick={handleDeposit}>质押</Button>
         </div>
       )
     }
