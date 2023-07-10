@@ -1,4 +1,3 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import type { NextPage } from 'next'
 import { Address, useContractRead, useWalletClient } from 'wagmi'
 import { getErc20Contract, getIdoStakeContract } from 'utils/contractHelpers'
