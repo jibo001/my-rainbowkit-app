@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "APP_ENV=development next dev",
     "build": "APP_ENV=development next build && next export",
-    "start": "next start",
+    "start": "APP_ENV=development next start -p 8090",
     "lint": "next lint"
   },
   "dependencies": {
