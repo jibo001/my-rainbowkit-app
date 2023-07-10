@@ -1,16 +1,22 @@
-import { env } from 'config/env'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import React, { ReactNode, useEffect } from 'react'
-import { useChainId, useNetwork, useSwitchNetwork } from 'wagmi'
+import { useChainId, useSwitchNetwork } from 'wagmi'
+import styles from 'styles/AppWrapper.module.css'
+import { env } from 'config/env'
 
 export const AppWrapper = ({ children }: { children: ReactNode }) => {
   const chainId = useChainId()
   const { switchNetwork } = useSwitchNetwork()
   useEffect(() => {
-    console.log(env)
-
     if (chainId !== env.chainId) {
       switchNetwork?.(env.chainId)
     }
   }, [chainId, switchNetwork])
-  return <div>{children}</div>
+  return (
+    <div className={styles.container}>
+      <ConnectButton />
+
+      {children}
+    </div>
+  )
 }

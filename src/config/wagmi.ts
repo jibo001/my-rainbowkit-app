@@ -2,12 +2,7 @@ import { getDefaultWallets } from '@rainbow-me/rainbowkit'
 import { configureChains, createConfig } from 'wagmi'
 import {
   bsc,
-  bscTestnet,
-  mainnet,
-  optimism,
-  arbitrum,
-  polygon,
-  zora
+  bscTestnet
 } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { env } from './env'
@@ -15,12 +10,7 @@ import { env } from './env'
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     bsc,
-    bscTestnet,
-    // mainnet,
-    // polygon,
-    // optimism,
-    // arbitrum,
-    // zora
+    bscTestnet
   ],
   [publicProvider()]
 )

@@ -1,30 +1,67 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
-import { useContractRead } from 'wagmi'
-import { getIdoStakeContract } from 'utils/contractHelpers'
+import { Address, useContractRead, useWalletClient } from 'wagmi'
+import { getErc20Contract, getIdoStakeContract } from 'utils/contractHelpers'
+import useTokenApprovalStatus from 'hooks/useTokenApprovalStatus'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { MaxUint256 } from 'ethers'
+import { Button } from 'antd-mobile'
+import useCatchTxError from 'hooks/useCatchTxError'
 
 const Home: NextPage = () => {
-  const idoStakeContract = getIdoStakeContract()
+  const { data: walletClient } = useWalletClient()
+
+  const idoStakeContract = getIdoStakeContract(walletClient)
   const ido = useContractRead({
-    address: idoStakeContract.address,
-    abi: idoStakeContract.abi,
+    ...idoStakeContract,
     functionName: 'SBTC'
   })
 
   const PoolInfo = () => {
+    const { isVaultApproved } = useTokenApprovalStatus(
+      ido.data as Address,
+      idoStakeContract.address
+    )
+    const { fetchWithCatchTxError, loading: isApproving } = useCatchTxError()
+    const { callWithGasPrice } = useCallWithGasPrice()
+    const sbtcContract = getErc20Contract(ido.data!, walletClient!)
+
+    const handleApprove = async () => {
+      const receipt = await fetchWithCatchTxError(() => {
+        return callWithGasPrice(sbtcContract, 'approve', [
+          idoStakeContract.address,
+          MaxUint256
+        ])
+      })
+      console.log(receipt)
+    }
+
     if (ido.isFetching) {
       return <div>Loading...</div>
     } else if (ido.isSuccess) {
-      return <div>{ido.data}</div>
+      return (
+        <div>
+          <div>address:{ido.data}</div>
+          {isVaultApproved ? (
+            <div>已授权</div>
+          ) : (
+            <Button
+              color="primary"
+              fill="solid"
+              loading={isApproving}
+              onClick={handleApprove}>
+              授权
+            </Button>
+          )}
+        </div>
+      )
     }
   }
 
   return (
     <>
-      <div className={styles.container}>
-        <ConnectButton />
-        {PoolInfo()}
+      <div>
+        <div className="text-red-500">{PoolInfo()}</div>
       </div>
     </>
   )
