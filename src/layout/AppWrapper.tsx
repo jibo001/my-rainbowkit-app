@@ -6,6 +6,8 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
   const chainId = useChainId()
   const { switchNetwork } = useSwitchNetwork()
   useEffect(() => {
+    console.log(env)
+
     if (chainId !== env.chainId) {
       switchNetwork?.(env.chainId)
     }

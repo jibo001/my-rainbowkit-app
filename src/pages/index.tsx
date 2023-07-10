@@ -6,7 +6,6 @@ import { getIdoStakeContract } from 'utils/contractHelpers'
 
 const Home: NextPage = () => {
   const idoStakeContract = getIdoStakeContract()
-
   const ido = useContractRead({
     address: idoStakeContract.address,
     abi: idoStakeContract.abi,

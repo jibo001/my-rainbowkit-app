@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "APP_ENV=development next dev",
-    "build": "next build",
+    "build": "APP_ENV=development next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
