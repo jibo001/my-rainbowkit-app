@@ -7,7 +7,7 @@ import { fromHex } from "viem"
 export const useActiveChain = () => {
   const [chainId, setChainId] = useState<number>()
   useEffect(() => {
-    setChainId(fromHex(window.ethereum.chainId, 'number'))
+    setChainId(fromHex(window.ethereum.chainId || '0x0', 'number'))
   }, [])
   return chainId
 }

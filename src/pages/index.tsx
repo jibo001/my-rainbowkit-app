@@ -17,35 +17,25 @@ const Home: NextPage = () => {
   const idoStakeContract = getIdoStakeContract(walletClient)
   const ido = useContractRead({
     ...idoStakeContract,
-    functionName: 'SBTC'
+    functionName: 'SBTC',
   })
 
   const PoolInfo = () => {
-    const { isVaultApproved } = useTokenApprovalStatus(
-      ido.data as Address,
-      idoStakeContract.address
-    )
+    const { isVaultApproved } = useTokenApprovalStatus(ido.data as Address, idoStakeContract.address)
     const { fetchWithCatchTxError, loading: isApproving } = useCatchTxError()
     const { callWithGasPrice } = useCallWithGasPrice()
     const sbtcContract = getErc20Contract(ido.data!, walletClient!)
 
     const handleApprove = async () => {
       const receipt = await fetchWithCatchTxError(() => {
-        return callWithGasPrice(sbtcContract, 'approve', [
-          idoStakeContract.address,
-          MaxUint256
-        ])
+        return callWithGasPrice(sbtcContract, 'approve', [idoStakeContract.address, MaxUint256])
       })
       console.log(receipt)
     }
 
     const handleDeposit = async () => {
       const receipt = await fetchWithCatchTxError(() => {
-        return callWithGasPrice(idoStakeContract, 'deposit', [
-          1,
-          new BigNumber(1000),
-          false
-        ])
+        return callWithGasPrice(idoStakeContract, 'deposit', [1, new BigNumber(1000), false])
       })
       console.log(receipt)
     }
@@ -72,11 +62,7 @@ const Home: NextPage = () => {
             {i18n.language === 'zh-CN' ? "CN" : "EN"}
           </Button>
           <div>address:{ido.data}</div>
-          <Button
-            color="primary"
-            fill="solid"
-            loading={isApproving}
-            onClick={handleApprove}>
+          <Button color="primary" fill="solid" loading={isApproving} onClick={handleApprove}>
             授权
             {t("pass")}
           </Button>
@@ -89,6 +75,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div>
+        <div></div>
         <div className="text-red-500">{PoolInfo()}</div>
       </div>
     </>
