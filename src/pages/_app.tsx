@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app'
 import { chains, wagmiConfig } from '../config/wagmi'
 import { AppWrapper } from 'layout/AppWrapper'
 import { env } from 'config/env'
-import 'i18n/config'
+import 'locales/config'
 
 function MyApp({ Component, pageProps }: AppProps) {
   // 语种初始化 && cache
