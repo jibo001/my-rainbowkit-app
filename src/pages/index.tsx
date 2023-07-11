@@ -7,12 +7,14 @@ import { MaxUint256 } from 'ethers'
 import { Button } from 'antd-mobile'
 import useCatchTxError from 'hooks/useCatchTxError'
 import BigNumber from 'bignumber.js'
-import { useTranslation } from "react-i18next";
-import i18n from 'i18next';
+import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
+import { useLocal } from 'hooks/useLocal'
 
 const Home: NextPage = () => {
   const { data: walletClient } = useWalletClient()
-  const { t } = useTranslation(["claim"]);
+  const { t } = useTranslation()
+  const { setLang } = useLocal()
 
   const idoStakeContract = getIdoStakeContract(walletClient)
   const ido = useContractRead({
@@ -30,7 +32,6 @@ const Home: NextPage = () => {
       const receipt = await fetchWithCatchTxError(() => {
         return callWithGasPrice(sbtcContract, 'approve', [idoStakeContract.address, MaxUint256])
       })
-      console.log(receipt)
     }
 
     const handleDeposit = async () => {
@@ -40,31 +41,22 @@ const Home: NextPage = () => {
       console.log(receipt)
     }
 
-
     const toggleI18n = () => {
-      let lang = i18n.language === 'zh-CN' ? 'en-US' : 'zh-CN';
-      i18n.changeLanguage(lang);
-      localStorage.setItem("decert.lang", lang)
-  }
+      setLang(i18n.language === 'zh-CN' ? 'en-US' : 'zh-CN')
+    }
 
     if (ido.isFetching) {
       return <div>Loading...</div>
     } else if (ido.isSuccess) {
       return (
         <div>
-          <Button
-            type="ghost"
-            ghost
-            className='lang custom-btn'
-            id='hover-btn-line'
-            onClick={() => toggleI18n()}
-          >
-            {i18n.language === 'zh-CN' ? "CN" : "EN"}
+          <Button className="lang custom-btn" id="hover-btn-line" onClick={() => toggleI18n()}>
+            {i18n.language === 'zh-CN' ? 'CN' : 'EN'}
           </Button>
           <div>address:{ido.data}</div>
           <Button color="primary" fill="solid" loading={isApproving} onClick={handleApprove}>
             授权
-            {t("pass")}
+            {t('hello')}
           </Button>
           <Button onClick={handleDeposit}>质押</Button>
         </div>

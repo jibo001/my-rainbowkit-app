@@ -4,11 +4,13 @@ import styles from 'styles/AppWrapper.module.css'
 import { env } from 'config/env'
 import { useActiveChain } from 'hooks/useActiveChain'
 import { CustomConnectButton } from 'components/CustomConnectButton/CustomConnectButton'
+import { useLocal } from 'hooks/useLocal'
 
 export const AppWrapper = ({ children }: { children: ReactNode }) => {
   const { switchNetwork } = useSwitchNetwork()
   const { data: walletClient } = useWalletClient()
   const activeChainId = useActiveChain()
+  useLocal()
   useEffect(() => {
     if (activeChainId !== env.chainId) {
       switchNetwork?.(env.chainId)
