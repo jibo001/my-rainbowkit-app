@@ -7,9 +7,12 @@ import { MaxUint256 } from 'ethers'
 import { Button } from 'antd-mobile'
 import useCatchTxError from 'hooks/useCatchTxError'
 import BigNumber from 'bignumber.js'
+import { useTranslation } from "react-i18next";
+import i18n from 'i18next';
 
 const Home: NextPage = () => {
   const { data: walletClient } = useWalletClient()
+  const { t } = useTranslation(["claim"]);
 
   const idoStakeContract = getIdoStakeContract(walletClient)
   const ido = useContractRead({
@@ -47,11 +50,27 @@ const Home: NextPage = () => {
       console.log(receipt)
     }
 
+
+    const toggleI18n = () => {
+      let lang = i18n.language === 'zh-CN' ? 'en-US' : 'zh-CN';
+      i18n.changeLanguage(lang);
+      localStorage.setItem("decert.lang", lang)
+  }
+
     if (ido.isFetching) {
       return <div>Loading...</div>
     } else if (ido.isSuccess) {
       return (
         <div>
+          <Button
+            type="ghost"
+            ghost
+            className='lang custom-btn'
+            id='hover-btn-line'
+            onClick={() => toggleI18n()}
+          >
+            {i18n.language === 'zh-CN' ? "CN" : "EN"}
+          </Button>
           <div>address:{ido.data}</div>
           <Button
             color="primary"
@@ -59,6 +78,7 @@ const Home: NextPage = () => {
             loading={isApproving}
             onClick={handleApprove}>
             授权
+            {t("pass")}
           </Button>
           <Button onClick={handleDeposit}>质押</Button>
         </div>
