@@ -1,5 +1,3 @@
-import type { WindowProvider } from 'wagmi/window'
-
 export interface ExtendEthereum extends WindowProvider {
   isSafePal?: true
   isCoin98?: true
@@ -7,18 +5,17 @@ export interface ExtendEthereum extends WindowProvider {
   isMathWallet?: true
   isTrustWallet?: true
   isBlocto?: true
+  chainId: `0x${string}`
+  isMetaMask?: boolean
+  isTrust?: boolean
+  isCoinbaseWallet?: boolean
+  isTokenPocket?: boolean
+  request: (args: { method: string; params?: unknown }) => Promise<unknown>
+
 }
 
 declare global {
   interface Window {
-    coin98?: true
-    mercuryoWidget?: any
     ethereum?: ExtendEthereum
-    BinanceChain?: {
-      bnbSign?: (address: string, message: string) => Promise<{ publicKey: string; signature: string }>
-      switchNetwork?: (networkId: string) => Promise<string>
-    } & Ethereum
   }
 }
-
-export { }

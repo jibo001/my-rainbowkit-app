@@ -1,11 +1,12 @@
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { WagmiConfig, useChainId, useSwitchNetwork } from 'wagmi'
+import { WagmiConfig } from 'wagmi'
 import type { AppProps } from 'next/app'
 import { chains, wagmiConfig } from '../config/wagmi'
 import { AppWrapper } from 'layout/AppWrapper'
 import { env } from 'config/env'
+import { appWithTranslation } from 'next-i18next'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -19,4 +20,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)
