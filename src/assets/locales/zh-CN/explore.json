@@ -1,0 +1,33 @@
+{
+    "btn-exit": "退出预览",
+    "btn-publish": "确认发布",
+    "mode-preview": "预览模式",
+    "title": "探索挑战",
+    "btn-challenge": "挑战",
+    "btn-start": "开始挑战",
+    "creator": "创建者",
+    "reward": "奖励",
+    "challenger": "挑战者",
+    "pass": "已领取",
+    "claimable": "可领取",
+    "correct": "正确答案",
+    "ques": {
+        "title": "技术认证",
+        "desc": "完成挑战，可获得SBT（灵魂绑定代币）作为技术能力的证明。分享到你的社交平台，让世界知道你的能力。"
+    },
+    "challenge": {
+        "title": "题目"
+    },
+    "modal": {
+        "challenge": {
+            "title": "答题记录",
+            "complete": "已完成",
+            "uncomplete": "未完成"
+        }
+    },
+    "message": {
+        "error": {
+            "publish": "请退出预览，补充完整挑战内容。"
+        }
+    }
+}

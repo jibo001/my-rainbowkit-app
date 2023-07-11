@@ -1,0 +1,22 @@
+{
+    "vitae": {
+        "title": "What have ",
+        "title2": "You build.",
+        "subtitle": "web3 Vitae & reputation portal",
+        "inner": "Search by address or ENS",
+        "btn": "Get Started"
+    },
+    "sidbar": {
+        "search": "Search",
+        "rule": "Search by ENS or address",
+        "nodata": "No data",
+        "list": {
+            "all": "All",
+            "hide": "Hidden",
+            "public": "Public",
+            "unhide": "Unhide",
+            "add": "Add NFT"
+        }
+    },
+    "reload": "Reload"
+}
