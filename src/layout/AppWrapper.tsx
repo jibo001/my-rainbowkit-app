@@ -9,7 +9,6 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
   const { switchNetwork } = useSwitchNetwork()
   const { data: walletClient } = useWalletClient()
   const activeChainId = useActiveChain()
-
   useEffect(() => {
     if (activeChainId !== env.chainId) {
       switchNetwork?.(env.chainId)

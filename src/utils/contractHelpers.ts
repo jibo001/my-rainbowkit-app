@@ -5,7 +5,6 @@ import {
 // ABI
 // import idoStakeABI from 'config/abi/idoStakeAbi.json'
 import idoStake from 'config/abi/idoStake'
-import { ChainId } from 'config/constants/chainId'
 import { Abi, Address, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { erc20ABI, erc721ABI } from 'wagmi'
 
@@ -17,7 +16,7 @@ export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends 
 }: {
   abi: TAbi
   address: Address
-  chainId?: ChainId
+  chainId?: number
   signer?: TWalletClient
   publicClient?: PublicClient
 }) => {

@@ -16,9 +16,15 @@ import { calculateGasMargin } from 'utils'
 import { publicClient } from 'config/wagmi'
 import { env } from 'config/env'
 
-export function useCallWithGasPrice() {
-  const chainId = env.chainId
+/**
+* @description callWithGasPrice 预估gas并发送交易 返回交易hash
+* @param gasMargin gas增加量 1000n = 10%
+* @param chainId 链id
+* @return hash
+*/
+export function useCallWithGasPrice(gasMargin = 1000n, chainId = env.chainId) {
   const { data: walletClient } = useWalletClient()
+
   const callWithGasPriceWithSimulate = useCallback(
     async <
       TAbi extends Abi | unknown[],
@@ -50,7 +56,7 @@ export function useCallWithGasPrice() {
         account: walletClient!.account,
         functionName: functionName,
         args: methodArgs,
-        gas: calculateGasMargin(gas),
+        gas: calculateGasMargin(gas, gasMargin),
         value: 0n,
         ...overrides,
       } as unknown as WriteContractParameters)
@@ -61,7 +67,7 @@ export function useCallWithGasPrice() {
         hash,
       }
     },
-    [chainId, walletClient],
+    [chainId, gasMargin, walletClient],
   )
 
   return { callWithGasPrice: callWithGasPriceWithSimulate }

@@ -1,16 +1,15 @@
 import { getDefaultWallets } from '@rainbow-me/rainbowkit'
 import { configureChains, createConfig } from 'wagmi'
-import {
-  bsc,
-  bscTestnet
-} from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { env } from './env'
+import { chainMap } from './constants/chainId'
 
-const defaultChain = env.chainId === 56 ? bsc : bscTestnet
+
+
+
 
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [defaultChain],
+  [chainMap[env.chainId]],
   [publicProvider()]
 )
 

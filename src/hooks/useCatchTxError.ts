@@ -1,16 +1,17 @@
 import { Toast } from "antd-mobile"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { BaseError, Hash, UnknownRpcError } from "viem"
 import { SendTransactionResult, WaitForTransactionResult, waitForTransaction } from "wagmi/actions"
 
+/**
+ * @description 捕获交易错误 可拿到hash
+ */
 export type CatchTxErrorReturn = {
   fetchWithCatchTxError: (fn: () => Promise<SendTransactionResult | Hash>) => Promise<WaitForTransactionResult>
   fetchTxResponse: (fn: () => Promise<SendTransactionResult | Hash>) => Promise<SendTransactionResult>
   loading: boolean
   txResponseLoading: boolean
 }
-
-
 
 /// only show corrected parsed viem error
 export function parseError<TError>(err: TError): BaseError | null {
@@ -29,8 +30,8 @@ export default function useCatchTxError(): CatchTxErrorReturn {
   const [loading, setLoading] = useState(false)
   const [txResponseLoading, setTxResponseLoading] = useState(false)
 
-
   const handleError = (error: any) => {
+    if (!localStorage.getItem('wagmi.connected')) return Toast.show('Please connect wallet first')
     error = JSON.parse(JSON.stringify(error))
     Toast.show(error.cause.reason || error.shortMessage)
   }
