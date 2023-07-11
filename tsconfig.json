@@ -18,14 +18,15 @@
     "isolatedModules": true,
     "strictNullChecks": false,
     "noEmit": false,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "target": "es2020",
     "baseUrl": "./src",
     "paths": {
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "incremental": true
   },
   "exclude": [
     "**/node_modules",

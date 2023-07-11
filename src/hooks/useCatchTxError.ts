@@ -1,6 +1,6 @@
 import { Toast } from "antd-mobile"
-import { useCallback, useMemo, useState } from "react"
-import { BaseError, Hash, UnknownRpcError, TransactionExecutionError, ContractFunctionExecutionError, UserRejectedRequestError } from "viem"
+import { useCallback, useState } from "react"
+import { BaseError, Hash, UnknownRpcError } from "viem"
 import { SendTransactionResult, WaitForTransactionResult, waitForTransaction } from "wagmi/actions"
 
 export type CatchTxErrorReturn = {
@@ -71,7 +71,7 @@ export default function useCatchTxError(): CatchTxErrorReturn {
         tx = await callTx()
 
         const hash = typeof tx === 'string' ? tx : tx.hash
-        Toast.show('Transaction Submitted')
+        // Toast.show('Transaction Submitted')
         const receipt = await waitForTransaction({
           hash,
         })

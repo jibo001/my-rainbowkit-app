@@ -53,17 +53,13 @@ const Home: NextPage = () => {
       return (
         <div>
           <div>address:{ido.data}</div>
-          {isVaultApproved ? (
-            <div>已授权</div>
-          ) : (
-            <Button
-              color="primary"
-              fill="solid"
-              loading={isApproving}
-              onClick={handleApprove}>
-              授权
-            </Button>
-          )}
+          <Button
+            color="primary"
+            fill="solid"
+            loading={isApproving}
+            onClick={handleApprove}>
+            授权
+          </Button>
           <Button onClick={handleDeposit}>质押</Button>
         </div>
       )

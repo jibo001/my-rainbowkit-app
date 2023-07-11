@@ -1,20 +1,23 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import React, { ReactNode, useEffect } from 'react'
-import { useChainId, useSwitchNetwork } from 'wagmi'
+import { useSwitchNetwork, useWalletClient } from 'wagmi'
 import styles from 'styles/AppWrapper.module.css'
 import { env } from 'config/env'
+import { useActiveChain } from 'hooks/useActiveChain'
+import { CustomConnectButton } from 'components/CustomConnectButton/CustomConnectButton'
 
 export const AppWrapper = ({ children }: { children: ReactNode }) => {
-  const chainId = useChainId()
   const { switchNetwork } = useSwitchNetwork()
+  const { data: walletClient } = useWalletClient()
+  const activeChainId = useActiveChain()
+
   useEffect(() => {
-    if (chainId !== env.chainId) {
+    if (activeChainId !== env.chainId) {
       switchNetwork?.(env.chainId)
     }
-  }, [chainId, switchNetwork])
+  }, [activeChainId, switchNetwork, walletClient])
   return (
     <div className={styles.container}>
-      <ConnectButton />
+      <CustomConnectButton />
 
       {children}
     </div>

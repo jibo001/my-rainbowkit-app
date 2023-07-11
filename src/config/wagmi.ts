@@ -7,17 +7,15 @@ import {
 import { publicProvider } from 'wagmi/providers/public'
 import { env } from './env'
 
+const defaultChain = env.chainId === 56 ? bsc : bscTestnet
 
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    bsc,
-    bscTestnet
-  ],
+  [defaultChain],
   [publicProvider()]
 )
 
 const { connectors } = getDefaultWallets({
-  appName: 'RainbowKit App',
+  appName: 'template',
   projectId: env.projectId!,
   chains
 })
@@ -26,5 +24,5 @@ export const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
   publicClient,
-  webSocketPublicClient
+  // webSocketPublicClient
 })
