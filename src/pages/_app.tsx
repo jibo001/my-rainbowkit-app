@@ -9,8 +9,6 @@ import { env } from 'config/env'
 import 'locales/config'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // 语种初始化 && cache
-
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} initialChain={env.chainId}>

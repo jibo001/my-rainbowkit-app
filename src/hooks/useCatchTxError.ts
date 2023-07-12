@@ -9,6 +9,7 @@ import { SendTransactionResult, WaitForTransactionResult, waitForTransaction } f
 export type CatchTxErrorReturn = {
   fetchWithCatchTxError: (fn: () => Promise<SendTransactionResult | Hash>) => Promise<WaitForTransactionResult>
   fetchTxResponse: (fn: () => Promise<SendTransactionResult | Hash>) => Promise<SendTransactionResult>
+  handleError: (error: any) => void
   loading: boolean
   txResponseLoading: boolean
 }
@@ -91,6 +92,7 @@ export default function useCatchTxError(): CatchTxErrorReturn {
   return {
     fetchWithCatchTxError,
     fetchTxResponse,
+    handleError,
     loading,
     txResponseLoading,
   }

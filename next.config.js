@@ -7,7 +7,15 @@ const nextConfig = {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     return config
   },
-  i18n
+  i18n,
+  async rewrites () {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://103.229.124.117:8848/api/:path*'
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

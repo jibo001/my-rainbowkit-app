@@ -1,23 +1,31 @@
-import { getDefaultWallets } from '@rainbow-me/rainbowkit'
+import { env } from 'config/env';
 import { configureChains, createConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
-import { env } from './env'
 import { chainMap } from './constants/chainId'
-
-
-
-
+import {
+  injectedWallet,
+  metaMaskWallet,
+  walletConnectWallet,
+  trustWallet
+} from '@rainbow-me/rainbowkit/wallets';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [chainMap[env.chainId]],
   [publicProvider()]
 )
 
-const { connectors } = getDefaultWallets({
-  appName: 'template',
-  projectId: env.projectId!,
-  chains
-})
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [
+      metaMaskWallet({ chains, projectId: env.projectId }),
+      injectedWallet({ chains }),
+      walletConnectWallet({ projectId: env.projectId, chains }),
+      trustWallet({ chains, projectId: env.projectId })
+    ],
+  },
+]);
 
 export const wagmiConfig = createConfig({
   autoConnect: true,

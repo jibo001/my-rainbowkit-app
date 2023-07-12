@@ -11,6 +11,7 @@ export interface ExtendEthereum extends WindowProvider {
   isCoinbaseWallet?: boolean
   isTokenPocket?: boolean
   request: (args: { method: string; params?: unknown }) => Promise<unknown>
+  on: any
 
 }
 
