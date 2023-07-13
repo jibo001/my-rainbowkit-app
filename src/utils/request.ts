@@ -26,7 +26,6 @@ const request = <T>(
           code: -1,
           success: false,
           data: null,
-          message: 'Network exception',
           msg: 'Network exception'
         })
       })
@@ -55,8 +54,7 @@ const request = <T>(
             code: -1,
             success: false,
             data: null,
-            message: 'Network exception',
-            msg: 'Network exception',
+            msg: 'Token inValid',
           })
         } else {
           // Toast.fail(res.data.msg)
@@ -64,7 +62,6 @@ const request = <T>(
             code: res.data.code,
             success: false,
             data: null,
-            message: res.data.message || 'Network exception',
             msg: res.data.msg || 'Network exception',
           })
         }
@@ -85,7 +82,6 @@ const request = <T>(
           code: 500,
           success: false,
           data: null,
-          message: 'Network exception',
           msg: 'Network exception',
         })
       })

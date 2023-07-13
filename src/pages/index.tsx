@@ -13,7 +13,7 @@ import { useLocal } from 'hooks/useLocal'
 import useSign from 'hooks/useSign'
 import { env } from 'config/env'
 import { useActiveChain } from 'hooks/useActiveChain'
-import { useQueryUserInfo, queryUserInfo } from 'hooks/service/useUserService'
+import { useQueryUserInfo } from 'hooks/service/useUserService'
 
 const Home: NextPage = () => {
   const { data: walletClient } = useWalletClient()
@@ -26,6 +26,8 @@ const Home: NextPage = () => {
   })
 
   const useUserInfo = useQueryUserInfo()
+
+  console.log(useUserInfo)
 
   const PoolInfo = () => {
     const { isVaultApproved } = useTokenApprovalStatus(ido.data as Address, idoStakeContract.address)
@@ -53,7 +55,7 @@ const Home: NextPage = () => {
     }
     const handleSign = async () => {
       const isSuccess = await signAsync()
-      if (isSuccess) await queryUserInfo()
+      if (isSuccess) await useUserInfo.refetch()
     }
 
     if (ido.isFetching) {
